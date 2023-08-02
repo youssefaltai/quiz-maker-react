@@ -1,0 +1,369 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+}
+
+h1,
+h2 {
+  margin: 20px;
+}
+
+html,
+body,
+#root,
+.page {
+  width: 100%;
+  min-height: 80vh;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.page > .header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 500px;
+  padding: 10px;
+}
+
+.home-page {
+}
+
+.admin-page {
+}
+
+.admin-auth-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.edit-quiz-page {
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.quiz-details-row {
+  gap: 50px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="number"] {
+  width: 100%;
+  max-width: 200px;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 8px;
+  background-color: #eee;
+  border: none;
+  font-size: 16px;
+}
+
+input[type="text"]:hover,
+input[type="password"]:hover,
+input[type="number"]:hover {
+  background-color: #ddd;
+}
+
+.edit-quiz-page .answer-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.quiz-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.quiz-page .answer-list {
+  margin-bottom: 20px;
+}
+
+.quiz-page button.submit {
+  margin-bottom: 20px;
+}
+
+.quiz-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 500px;
+  padding: 10px;
+}
+
+.quiz-list-item {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 100px;
+  border: 2px solid #aaa;
+  border-radius: 16px;
+  padding: 10px;
+  gap: 10px;
+}
+
+.quiz-list-item:hover {
+  background-color: #eee;
+}
+
+.answer-list {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px;
+}
+
+.answer-list-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+
+.answer-list-item-label {
+  cursor: pointer;
+}
+
+a {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #fff;
+  background-color: #2563EB;
+  padding: 10px;
+  border-radius: 16px;
+  border: none;
+  cursor: pointer;
+  margin: 10px;
+}
+
+a:hover {
+  background-color: #1D4ED8;
+}
+
+button:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+}
+
+.image-upload-overlay {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.image-upload-overlay:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.answer-list-item-correct {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Create a custom radio button */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+  border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.answer-list-item-correct:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.answer-list-item-correct input:checked ~ .checkmark {
+  background-color: #2196F3;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.answer-list-item-correct input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.answer-list-item-correct .checkmark:after {
+ 	top: 9px;
+	left: 9px;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: white;
+}
+
+.answer-list-item-correct:hover {
+  background-color: rgba(0, 200, 0, 0.2);
+}
+
+button {
+  cursor: pointer;
+  padding: 16px;
+  margin: 16px;
+}
+
+.icon-button {
+  cursor: pointer;
+  padding: 16px;
+  margin: 16px;
+  border: none;
+  border-radius: 50%;
+  background-color: transparent;
+}
+
+.icon-button:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.big-button {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 16px;
+  margin: 16px;
+  border: none;
+  border-radius: 16px;
+  background-color: #10B981;
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.big-button:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+}
+
+.big-button:disabled:hover {
+  background-color: #aaa;
+}
+
+.big-button:hover {
+  background-color: #059669;
+}
+
+.timer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 16px;
+  border-radius: 16px;
+  background-color: #2196F3;
+  color: #fff;
+  border: none;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.timer span {
+  font-size: 20px;
+  font-weight: bold;
+  background-color: #fff;
+  color: #2196F3;
+  gap: 10px;
+  padding: 8px;
+  border-radius: 16px;
+  margin: 5px;
+}
+
+.quiz-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  width: 100%;
+  max-width: 800px;
+}
+
+.nav-bar {
+  background-color: #fff;
+  border-bottom: 1px solid #bbb;
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.nav-bar a {
+  background-color: transparent;
+  color: #000;
+}
+.nav-bar a:hover {
+  background-color: #eee;
+  color: #2196F3;
+}
