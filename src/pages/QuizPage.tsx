@@ -15,18 +15,6 @@ export default function QuizPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!quizId) return;
-
-    startQuiz(
-      quizId || "",
-      (message) => {
-        alert(message);
-        navigate('/quizzes');
-      }
-    );
-  }, [quizId]);
-
-  useEffect(() => {
     getQuiz(
       quizId || "",
       (message) => alert(message)
@@ -67,6 +55,17 @@ export default function QuizPage() {
         src={`
         data:image/jpeg;base64,${currentQuiz?.question}`}
         alt={"Question image"}
+        onLoad={() => {
+          if (!quizId) return;
+
+          startQuiz(
+            quizId || "",
+            (message) => {
+              alert(message);
+              navigate('/quizzes');
+            }
+          );
+        }}
       />
       <div className="answer-list">
         {currentQuiz?.answers.map((answer, index) => (
