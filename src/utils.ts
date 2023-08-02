@@ -8,18 +8,18 @@ export const exportAsImage = async (
   return image;
 };
 
-const downloadImage = (
-  blob: string,
-  fileName: string,
-) => {
-  const fakeLink = window.document.createElement("a");
-  fakeLink.download = fileName;
-
-  fakeLink.href = blob;
-
-  document.body.appendChild(fakeLink);
-  fakeLink.click();
-  document.body.removeChild(fakeLink);
-
-  fakeLink.remove();
-};
+// const downloadImage = (
+//   blob: string,
+//   fileName: string,
+// ) => {
+//   const fakeLink = window.document.createElement("a");
+//   fakeLink.download = fileName;
+//
+//   fakeLink.href = blob;
+//
+//   document.body.appendChild(fakeLink);
+//   fakeLink.click();
+//   document.body.removeChild(fakeLink);
+//
+//   fakeLink.remove();
+// };
