@@ -12,7 +12,7 @@ export default function HomePage() {
       </Link>
       <Link to="/quizzes">
         <FontAwesomeIcon icon={faPencil} />
-        <p>Take a exam</p>
+        <p>Take an exam</p>
       </Link>
     </div>
   );

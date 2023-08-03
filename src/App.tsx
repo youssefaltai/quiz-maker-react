@@ -1,7 +1,7 @@
 import { Link, Outlet } from "react-router-dom";
 import useAuth from "./hooks/authHook";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGear, faHome, faPencil, faSignIn } from "@fortawesome/free-solid-svg-icons";
+import { faGear, faHome, faPencil, faSignIn, faSignOut } from "@fortawesome/free-solid-svg-icons";
 
 function NavBar() {
   const { logout, admin } = useAuth();
@@ -17,17 +17,16 @@ function NavBar() {
       </Link>
 
       {
-        admin ?
-          <Link to="/admin">
-            <FontAwesomeIcon icon={faGear} />
-            <p>Manage exams</p>
-          </Link>
-          :
-          <Link to="/quizzes">
-            <FontAwesomeIcon icon={faPencil} />
-            <p>Take a exam</p>
-          </Link>
+        admin &&
+        <Link to="/admin">
+          <FontAwesomeIcon icon={faGear} />
+          <p>Manage exams</p>
+        </Link>
       }
+      <Link to="/quizzes">
+        <FontAwesomeIcon icon={faPencil} />
+        <p>Take an exam</p>
+      </Link>
       <div
         style={{
           flexGrow: 1,
@@ -40,11 +39,12 @@ function NavBar() {
             onClick={logout}
           >
             Logout
+            <FontAwesomeIcon icon={faSignOut} />
           </button>
           :
           <Link to="/auth">
-            <FontAwesomeIcon icon={faSignIn} />
             <p>Login</p>
+            <FontAwesomeIcon icon={faSignIn} />
           </Link>
       }
     </div>
