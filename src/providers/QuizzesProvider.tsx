@@ -1,12 +1,13 @@
 import { PropsWithChildren, useEffect, useState } from "react";
 import QuizzesContext from "../contexts/quizzesContext";
 import Quiz, { quizFromJson } from "../models/quiz";
+import { API_URL } from "../env";
 
 export default function QuizzesProvider({ children }: PropsWithChildren) {
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
 
   const fetchQuizzes = async () => {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/quiz`);
+    const response = await fetch(`${API_URL}/quiz`);
     const json = await response.json();
     const quizzes = json.map((quiz: any) => quizFromJson(quiz));
     setQuizzes(quizzes);
@@ -14,7 +15,7 @@ export default function QuizzesProvider({ children }: PropsWithChildren) {
 
   const getQuiz = async (quizId: string, onError: (message: string) => void) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/quiz/${quizId}`);
+      const response = await fetch(`${API_URL}/quiz/${quizId}`);
       const json = await response.json();
       return quizFromJson(json);
     } catch (e: any) {
@@ -43,7 +44,7 @@ export default function QuizzesProvider({ children }: PropsWithChildren) {
       formData.append("answers", JSON.stringify(quiz.answers));
       formData.append("correctAnswer", quiz.correctAnswer.toString());
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/quiz`, {
+      const response = await fetch(`${API_URL}/quiz`, {
         method: "POST",
         body: formData,
       });
@@ -78,7 +79,7 @@ export default function QuizzesProvider({ children }: PropsWithChildren) {
       if (quiz.correctAnswer)
         formData.append("correctAnswer", quiz.correctAnswer.toString());
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/quiz/${quiz.id}`, {
+      const response = await fetch(`${API_URL}/quiz/${quiz.id}`, {
         method: "PUT",
         body: formData,
       });
@@ -103,7 +104,7 @@ export default function QuizzesProvider({ children }: PropsWithChildren) {
       formData.append("answerOrder", answerOrder.toString());
       formData.append("image", image);
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/quiz/${quizId}/answer`, {
+      const response = await fetch(`${API_URL}/quiz/${quizId}/answer`, {
         method: "POST",
         body: formData,
       });
@@ -115,7 +116,7 @@ export default function QuizzesProvider({ children }: PropsWithChildren) {
 
   const startQuiz = async (quizId: string, onError: (message: string) => void) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/quiz/${quizId}/start`, {
+      const response = await fetch(`${API_URL}/quiz/${quizId}/start`, {
         method: "POST",
       });
       const json = await response.json();

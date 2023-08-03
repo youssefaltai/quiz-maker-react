@@ -1,12 +1,13 @@
 import { PropsWithChildren } from "react";
 import AuthContext from "../contexts/authContext";
 import useLocalStorage from "../hooks/localStorageHook";
+import { API_URL } from "../env";
 
 export default function AuthProvider({ children }: PropsWithChildren) {
   const [admin, setAdmin] = useLocalStorage<boolean>("admin", false);
 
   async function login(password: string) {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
+    const response = await fetch(`${API_URL}/auth/login`, {
       method: "POST",
       body: JSON.stringify({ password }),
       headers: {
