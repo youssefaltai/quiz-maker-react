@@ -13,6 +13,46 @@ export default function QuizzesProvider({ children }: PropsWithChildren) {
     setQuizzes(quizzes);
   }
 
+  const deleteMultipleQuizzes = async (quizIds: string[], onError: (message: string) => void) => {
+    try {
+      const formData = new FormData();
+
+      formData.append("quizzes", JSON.stringify(quizIds));
+
+      const response = await fetch(`${API_URL}/quiz`, {
+        method: "DELETE",
+        body: formData,
+      });
+      const json = await response.json();
+
+      if (json.error) {
+        throw new Error(json.error);
+      }
+
+      await fetchQuizzes();
+    } catch (e: any) {
+      onError(e.message);
+    }
+  }
+
+
+  const deleteQuiz = async (quizId: string, onError: (message: string) => void) => {
+    try {
+      const response = await fetch(`${API_URL}/quiz/${quizId}`, {
+        method: "DELETE",
+      });
+      const json = await response.json();
+
+      if (json.error) {
+        throw new Error(json.error);
+      }
+
+      await fetchQuizzes();
+    } catch (e: any) {
+      onError(e.message);
+    }
+  }
+
   const getQuiz = async (quizId: string, onError: (message: string) => void) => {
     try {
       const response = await fetch(`${API_URL}/quiz/${quizId}`);
@@ -30,8 +70,6 @@ export default function QuizzesProvider({ children }: PropsWithChildren) {
         throw new Error("Quiz name is required");
       if (!quiz.question)
         throw new Error("Quiz question is required");
-      if (!quiz.timer)
-        throw new Error("Quiz timer is required");
       if (quiz.answers.length === 0)
         throw new Error("Quiz answers are required");
       if (!quiz.correctAnswer)
@@ -40,7 +78,6 @@ export default function QuizzesProvider({ children }: PropsWithChildren) {
       const formData = new FormData();
       formData.append("name", quiz.name);
       formData.append("question", quiz.question);
-      formData.append("timer", quiz.timer.toString());
       formData.append("answers", JSON.stringify(quiz.answers));
       formData.append("correctAnswer", quiz.correctAnswer.toString());
 
@@ -72,8 +109,6 @@ export default function QuizzesProvider({ children }: PropsWithChildren) {
         formData.append("name", quiz.name);
       if (quiz.question)
         formData.append("question", quiz.question);
-      if (quiz.timer)
-        formData.append("timer", quiz.timer.toString());
       if (quiz.answers)
         formData.append("answers", JSON.stringify(quiz.answers));
       if (quiz.correctAnswer)
@@ -114,26 +149,12 @@ export default function QuizzesProvider({ children }: PropsWithChildren) {
     }
   }
 
-  const startQuiz = async (quizId: string, onError: (message: string) => void) => {
-    try {
-      const response = await fetch(`${API_URL}/quiz/${quizId}/start`, {
-        method: "POST",
-      });
-      const json = await response.json();
-      if (json.error) {
-        throw new Error(json.error);
-      }
-    } catch (e: any) {
-      onError(e.message);
-    }
-  }
-
   useEffect(() => {
     fetchQuizzes();
   }, []);
 
   return (
-    <QuizzesContext.Provider value={{ quizzes, createQuiz, updateQuiz, answerQuiz, getQuiz, startQuiz }}>
+    <QuizzesContext.Provider value={{ quizzes, createQuiz, updateQuiz, answerQuiz, getQuiz, deleteQuiz, deleteMultipleQuizzes }}>
       {children}
     </QuizzesContext.Provider>
   );

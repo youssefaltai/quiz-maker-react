@@ -2,15 +2,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import useQuizzes from "../hooks/quizzesHook";
 import Quiz from "../models/quiz";
 import { useEffect, useRef, useState } from "react";
-import useTimer from "../hooks/timerHook";
 import { exportAsImage } from "../utils";
+
 
 export default function QuizPage() {
   const { quizId } = useParams();
-  const { answerQuiz, getQuiz, startQuiz } = useQuizzes();
+  const { answerQuiz, getQuiz } = useQuizzes();
   const [currentQuiz, setCurrentQuiz] = useState<Quiz>();
   const [currentAnswer, setCurrentAnswer] = useState<number | null>();
-  const { seconds, isActive, startTimer, stopTimer } = useTimer();
   const exportRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
@@ -21,51 +20,20 @@ export default function QuizPage() {
     ).then((quiz) => {
       if (quiz) {
         setCurrentQuiz(quiz);
-        startTimer(quiz.timer);
-      } else throw new Error("Quiz not found");
+      } else {
+        alert("Quiz not found");
+        navigate('/quizzes');
+      }
     });
   }, [quizId, getQuiz]);
 
-
-  useEffect(() => {
-    if (!currentQuiz) return;
-    if (seconds === 0) {
-      exportAsImage(exportRef.current!).then((screenshot) => {
-        answerQuiz(
-          currentQuiz.id ?? "",
-          currentAnswer ? currentAnswer : 0,
-          screenshot,
-          (message) => alert(message)
-        ).then(() => {
-          navigate('/quizzes');
-        });
-      });
-    }
-  }, [seconds, isActive]);
-
   return (
     <div className="page quiz-page" ref={exportRef}>
-      <div className="quiz-header">
-        <h1>{currentQuiz?.name}</h1>
-        <div className="timer">
-          <p>Time Remaining: <span>{seconds}</span> seconds</p>
-        </div>
-      </div>
+      <h1>{currentQuiz?.name}</h1>
       <img
         src={`
         data:image/jpeg;base64,${currentQuiz?.question}`}
         alt={"Question image"}
-        onLoad={() => {
-          if (!quizId) return;
-
-          startQuiz(
-            quizId || "",
-            (message) => {
-              alert(message);
-              navigate('/quizzes');
-            }
-          );
-        }}
       />
       <div className="answer-list">
         {currentQuiz?.answers.map((answer, index) => (
@@ -103,7 +71,16 @@ export default function QuizPage() {
         disabled={!currentAnswer}
         onClick={() => {
           if (!currentQuiz) return;
-          stopTimer();
+          exportAsImage(exportRef.current!).then((screenshot) => {
+            answerQuiz(
+              currentQuiz.id ?? "",
+              currentAnswer ? currentAnswer : 0,
+              screenshot,
+              (message) => alert(message)
+            ).then(() => {
+              navigate('/quizzes');
+            });
+          });
         }}
       >
         Submit

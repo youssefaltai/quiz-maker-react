@@ -7,7 +7,8 @@ type QuizzesContextType = {
   createQuiz: (quiz: Quiz, onError: (message: string) => void) => Promise<Quiz | null>;
   updateQuiz: (quiz: Quiz, onError: (message: string) => void) => Promise<Quiz | null>;
   answerQuiz: (quizId: string, answerOrder: number, image: string, onError: (message: string) => void) => Promise<void>;
-  startQuiz: (quizId: string, onError: (message: string) => void) => Promise<void>;
+  deleteQuiz: (quizId: string, onError: (message: string) => void) => Promise<void>;
+  deleteMultipleQuizzes: (quizIds: string[], onError: (message: string) => void) => Promise<void>;
 };
 
 const QuizzesContext = createContext<QuizzesContextType>({
@@ -16,7 +17,8 @@ const QuizzesContext = createContext<QuizzesContextType>({
   createQuiz: async (_: Quiz, __: (message: string) => void) => null,
   updateQuiz: async (_: Quiz, __: (message: string) => void) => null,
   answerQuiz: async (_: string, __: number, ___: string, ____: (message: string) => void) => { },
-  startQuiz: async (_: string, __: (message: string) => void) => { },
+  deleteQuiz: async (_: string, __: (message: string) => void) => { },
+  deleteMultipleQuizzes: async (_: string[], __: (message: string) => void) => { },
 });
 
 export default QuizzesContext;
