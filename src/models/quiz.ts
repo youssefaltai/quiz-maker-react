@@ -9,6 +9,7 @@ type Quiz = {
   question: string;
   answers: Answer[];
   correctAnswer: number;
+  category: 'statics' | 'dynamics'
 }
 
 export function quizFromJson(json: any): Quiz {
@@ -22,7 +23,8 @@ export function quizFromJson(json: any): Quiz {
         answer: answer.answer,
       };
     }),
-    correctAnswer: json.correctAnswer
+    correctAnswer: json.correctAnswer,
+    category: json.category
   };
 }
 

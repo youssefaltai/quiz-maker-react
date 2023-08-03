@@ -74,12 +74,15 @@ export default function QuizzesProvider({ children }: PropsWithChildren) {
         throw new Error("Quiz answers are required");
       if (!quiz.correctAnswer)
         throw new Error("Quiz correct answer is required");
+      if (!quiz.category)
+        throw new Error("Quiz category is required");
 
       const formData = new FormData();
       formData.append("name", quiz.name);
       formData.append("question", quiz.question);
       formData.append("answers", JSON.stringify(quiz.answers));
       formData.append("correctAnswer", quiz.correctAnswer.toString());
+      formData.append("category", quiz.category);
 
       const response = await fetch(`${API_URL}/quiz`, {
         method: "POST",
@@ -113,6 +116,8 @@ export default function QuizzesProvider({ children }: PropsWithChildren) {
         formData.append("answers", JSON.stringify(quiz.answers));
       if (quiz.correctAnswer)
         formData.append("correctAnswer", quiz.correctAnswer.toString());
+      if (quiz.category)
+        formData.append("category", quiz.category.toString());
 
       const response = await fetch(`${API_URL}/quiz/${quiz.id}`, {
         method: "PUT",

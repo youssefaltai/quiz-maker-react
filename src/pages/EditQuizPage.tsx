@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import useQuizzes from "../hooks/quizzesHook";
 import { useEffect, useState } from "react";
 import Quiz from "../models/quiz";
@@ -15,17 +15,19 @@ export default function EditQuizPage({ create }: EditQuizPageProps) {
   const { quizId } = useParams<{ quizId: string }>();
   const { getQuiz, createQuiz, updateQuiz } = useQuizzes();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [currentQuiz, setCurrentQuiz] = useState<Quiz>();
 
   useEffect(() => {
     if (create) {
-      const newQuiz = {
+      const newQuiz: Quiz = {
         id: "",
         name: "",
         question: "",
         answers: [],
-        correctAnswer: 1
+        correctAnswer: 1,
+        category: location.state?.category || "dynamics",
       }
       setCurrentQuiz(newQuiz);
     } else {
@@ -60,7 +62,6 @@ export default function EditQuizPage({ create }: EditQuizPageProps) {
           {create ? "Create a new " : "Edit "}
           Exam
         </h1>
-
         <button className="big-button"
           onClick={onSave}
         >
@@ -81,6 +82,27 @@ export default function EditQuizPage({ create }: EditQuizPageProps) {
               ...currentQuiz!,
               name: e.target.value
             })} />
+        </div>
+        <div>
+          <label htmlFor="quizCategory">Exam type</label>
+          <select
+            name="quizCategory"
+            id="quizCategory"
+            value={currentQuiz?.category}
+            onChange={(e) => {
+              setCurrentQuiz({
+                ...currentQuiz!,
+                category: (e.target.value as "statics" | "dynamics")
+              })
+            }}
+          >
+            <option value={"statics"}>
+              Statics
+            </option>
+            <option value={"dynamics"}>
+              Dynamics
+            </option>
+          </select>
         </div>
       </div>
       <h2>Question</h2>
