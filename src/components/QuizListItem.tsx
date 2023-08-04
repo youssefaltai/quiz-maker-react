@@ -7,9 +7,10 @@ import useQuizzes from "../hooks/quizzesHook";
 type QuizListItemProps = {
   quiz: Quiz;
   admin: boolean;
+  onDelete: () => void;
 };
 
-export default function QuizListItem({ quiz, admin }: QuizListItemProps) {
+export default function QuizListItem({ quiz, admin, onDelete }: QuizListItemProps) {
   const { deleteQuiz } = useQuizzes();
 
   return (
@@ -40,6 +41,8 @@ export default function QuizListItem({ quiz, admin }: QuizListItemProps) {
             if (window.confirm("Are you sure you want to delete this exam?")) {
               deleteQuiz(quiz.id, (message) => {
                 alert(message);
+              }).then(() => {
+                onDelete();
               });
             }
           }}

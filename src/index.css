@@ -391,3 +391,22 @@ select:hover {
   width: 100%;
   max-width: 800px;
 }
+
+.pagination {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+}
+
+.pagination div {
+  padding: 10px;
+  margin: 5px;
+  border: none;
+  border-radius: 8px;
+  background-color: #eee;
+  color: #000;
+  font-size: 16px;
+  outline: none;
+}

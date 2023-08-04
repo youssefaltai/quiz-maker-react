@@ -13,7 +13,7 @@ type EditQuizPageProps = {
 
 export default function EditQuizPage({ create }: EditQuizPageProps) {
   const { quizId } = useParams<{ quizId: string }>();
-  const { getQuiz, createQuiz, updateQuiz } = useQuizzes();
+  const { getQuiz, createQuiz, fetchQuizzes, updateQuiz } = useQuizzes();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -51,8 +51,10 @@ export default function EditQuizPage({ create }: EditQuizPageProps) {
     else {
       res = await updateQuiz(currentQuiz!, (message) => alert(message));
     }
-    if (res)
-      navigate(`/admin`);
+    if (res) {
+      await fetchQuizzes(1, res.category, (message) => alert(message));
+      navigate(`/admin/${res.category}`);
+    }
   }
 
   return (

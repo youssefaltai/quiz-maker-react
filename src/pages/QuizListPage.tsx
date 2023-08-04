@@ -4,8 +4,8 @@ import useQuizzes from "../hooks/quizzesHook";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAdd, faTrash } from "@fortawesome/free-solid-svg-icons";
 import useAuth from "../hooks/authHook";
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 type QuizListPageProps = {
   isAdmin: boolean;
@@ -14,9 +14,16 @@ type QuizListPageProps = {
 
 export default function QuizListPage({ isAdmin, category }: QuizListPageProps) {
   const { admin } = useAuth();
-  const { quizzes, deleteMultipleQuizzes } = useQuizzes();
+  const { quizzes, pageLimit, quizzesCount, fetchQuizzes, deleteMultipleQuizzes } = useQuizzes();
   const [selectedQuizzes, setSelectedQuizzes] = useState<string[]>([]);
+  const [page, setPage] = useState(1);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchQuizzes(page, category, (message) => {
+      alert(message);
+    });
+  }, [page]);
 
   return (
     <div className="page admin-page">
@@ -53,6 +60,9 @@ export default function QuizListPage({ isAdmin, category }: QuizListPageProps) {
                         alert(message);
                       }).then(() => {
                         setSelectedQuizzes([]);
+                        fetchQuizzes(page, category, (message) => {
+                          alert(message);
+                        });
                       });
                     }
                   } else {
@@ -74,7 +84,7 @@ export default function QuizListPage({ isAdmin, category }: QuizListPageProps) {
             <p>You have no exams</p>
           )
         }
-        {quizzes.filter((quiz) => quiz.category === category).map((quiz) => (
+        {quizzes.map((quiz) => (
           <div key={quiz.id} className="quiz-list-item-container">
             {
               admin && isAdmin &&
@@ -91,10 +101,40 @@ export default function QuizListPage({ isAdmin, category }: QuizListPageProps) {
                 <span className="checkmark"></span>
               </label>
             }
-            <QuizListItem quiz={quiz} admin={true && isAdmin} />
+            <QuizListItem quiz={quiz} admin={true && isAdmin} onDelete={() => {
+              fetchQuizzes(page, category, (message) => {
+                alert(message);
+              });
+            }} />
           </div>
         ))}
       </QuizList>
+      <div className="pagination">
+        <button
+          className="big-button"
+          disabled={page == 1}
+          onClick={() => {
+            if (page > 1) {
+              setPage((prev) => prev - 1);
+            }
+          }} >
+          <p>Previous</p>
+        </button>
+        <div className="page-number">
+          <p>{page}</p>
+        </div>
+        <button
+          className="big-button"
+          disabled={quizzesCount / pageLimit <= page}
+          onClick={() => {
+            if (quizzesCount / pageLimit > page) {
+              setPage((prev) => prev + 1);
+            }
+          }}
+        >
+          <p>Next</p>
+        </button>
+      </div>
     </div>
   );
 }
