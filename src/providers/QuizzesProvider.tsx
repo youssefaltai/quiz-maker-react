@@ -1,16 +1,28 @@
-import { PropsWithChildren, useEffect, useState } from "react";
+import { PropsWithChildren, useState } from "react";
 import QuizzesContext from "../contexts/quizzesContext";
 import Quiz, { quizFromJson } from "../models/quiz";
 import { API_URL } from "../env";
 
 export default function QuizzesProvider({ children }: PropsWithChildren) {
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
+  const [quizzesCount, setQuizzesCount] = useState<number>(0);
+  const [pageLimit, setPageLimit] = useState<number>(10);
 
-  const fetchQuizzes = async () => {
-    const response = await fetch(`${API_URL}/quiz`);
-    const json = await response.json();
-    const quizzes = json.map((quiz: any) => quizFromJson(quiz));
-    setQuizzes(quizzes);
+  const fetchQuizzes = async (page: number = 1, category: string, onError: (message: string) => void) => {
+    try {
+      const response = await fetch(`${API_URL}/quiz?page=${page}&category=${category}`);
+      const json = await response.json();
+
+      if (json.error) {
+        throw new Error(json.error);
+      }
+
+      setQuizzes(json.quizzes.map((quiz: any) => quizFromJson(quiz)));
+      setPageLimit(json.pageSize);
+      setQuizzesCount(json.count);
+    } catch (e: any) {
+      onError(e.message);
+    }
   }
 
   const deleteMultipleQuizzes = async (quizIds: string[], onError: (message: string) => void) => {
@@ -28,8 +40,6 @@ export default function QuizzesProvider({ children }: PropsWithChildren) {
       if (json.error) {
         throw new Error(json.error);
       }
-
-      await fetchQuizzes();
     } catch (e: any) {
       onError(e.message);
     }
@@ -46,8 +56,6 @@ export default function QuizzesProvider({ children }: PropsWithChildren) {
       if (json.error) {
         throw new Error(json.error);
       }
-
-      await fetchQuizzes();
     } catch (e: any) {
       onError(e.message);
     }
@@ -91,8 +99,6 @@ export default function QuizzesProvider({ children }: PropsWithChildren) {
       const json = await response.json();
       const newQuiz = quizFromJson(json);
 
-      await fetchQuizzes();
-
       return newQuiz;
     } catch (e: any) {
       onError(e.message);
@@ -126,8 +132,6 @@ export default function QuizzesProvider({ children }: PropsWithChildren) {
       const json = await response.json();
       const updatedQuiz = quizFromJson(json);
 
-      await fetchQuizzes();
-
       return updatedQuiz;
 
     } catch (e: any) {
@@ -154,12 +158,8 @@ export default function QuizzesProvider({ children }: PropsWithChildren) {
     }
   }
 
-  useEffect(() => {
-    fetchQuizzes();
-  }, []);
-
   return (
-    <QuizzesContext.Provider value={{ quizzes, createQuiz, updateQuiz, answerQuiz, getQuiz, deleteQuiz, deleteMultipleQuizzes }}>
+    <QuizzesContext.Provider value={{ quizzes, pageLimit, quizzesCount, fetchQuizzes, createQuiz, updateQuiz, answerQuiz, getQuiz, deleteQuiz, deleteMultipleQuizzes }}>
       {children}
     </QuizzesContext.Provider>
   );
