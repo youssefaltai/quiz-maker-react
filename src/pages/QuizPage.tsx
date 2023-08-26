@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import useQuizzes from "../hooks/quizzesHook";
 import Quiz from "../models/quiz";
 import { useEffect, useRef, useState } from "react";
@@ -12,6 +12,7 @@ export default function QuizPage() {
   const [currentAnswer, setCurrentAnswer] = useState<number | null>();
   const exportRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     getQuiz(
@@ -22,7 +23,7 @@ export default function QuizPage() {
         setCurrentQuiz(quiz);
       } else {
         alert("Quiz not found");
-        navigate('/quizzes');
+        navigate((location.state as any)?.from || "/quizzes");
       }
     });
   }, [quizId, getQuiz]);
@@ -78,7 +79,7 @@ export default function QuizPage() {
               screenshot,
               (message) => alert(message)
             ).then(() => {
-              navigate('/quizzes');
+              navigate((location.state as any)?.from || "/quizzes");
             });
           });
         }}

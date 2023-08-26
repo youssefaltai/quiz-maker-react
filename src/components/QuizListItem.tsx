@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Quiz from "../models/quiz";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -12,6 +12,7 @@ type QuizListItemProps = {
 
 export default function QuizListItem({ quiz, admin, onDelete }: QuizListItemProps) {
   const { deleteQuiz } = useQuizzes();
+  const location = useLocation();
 
   return (
     <div className="quiz-list-item" >
@@ -21,7 +22,9 @@ export default function QuizListItem({ quiz, admin, onDelete }: QuizListItemProp
           flexGrow: 1,
         }}
       />
-      <Link to={`/${admin ? "edit" : "quiz"}/${quiz.id}`} className="quiz-list-item__edit">
+      <Link to={`/${admin ? "edit" : "quiz"}/${quiz.id}`}
+        state={{ from: location.pathname }}
+        className="quiz-list-item__edit">
         {admin ?
           <FontAwesomeIcon icon={faEdit} />
           :
