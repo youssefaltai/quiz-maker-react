@@ -14,10 +14,31 @@ type QuizListPageProps = {
 
 export default function QuizListPage({ isAdmin, category }: QuizListPageProps) {
   const { admin } = useAuth();
-  const { quizzes, pageLimit, quizzesCount, fetchQuizzes, deleteMultipleQuizzes } = useQuizzes();
+  const {
+    dynamicsPage,
+    setDynamicsPage,
+    staticsPage,
+    setStaticsPage,
+    quizzes,
+    pageLimit,
+    quizzesCount,
+    fetchQuizzes,
+    deleteMultipleQuizzes
+  } = useQuizzes();
   const [selectedQuizzes, setSelectedQuizzes] = useState<string[]>([]);
-  const [page, setPage] = useState(1);
   const navigate = useNavigate();
+  const [editPage, setEditPage] = useState(false);
+
+  const page = category === 'statics' ? staticsPage : dynamicsPage;
+  const setPage = category === 'statics' ? setStaticsPage : setDynamicsPage;
+
+  const goToPage = (v: string) => {
+    const value = parseInt(v);
+    if (value >= 1 && value <= quizzesCount / pageLimit) {
+      setPage(value);
+    }
+    setEditPage(false);
+  };
 
   useEffect(() => {
     fetchQuizzes(page, category, (message) => {
@@ -120,9 +141,34 @@ export default function QuizListPage({ isAdmin, category }: QuizListPageProps) {
           }} >
           <p>Previous</p>
         </button>
-        <div className="page-number">
-          <p>{page}</p>
+        <div
+          className="page-number"
+          style={{
+            display: editPage ? "none" : "block",
+          }}
+          onClick={
+            () => {
+              setEditPage(true);
+            }
+          }>
+          {page}
         </div>
+        <input
+          type="number"
+          min={1}
+          max={quizzesCount / pageLimit}
+          style={{
+            display: editPage ? "block" : "none",
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              goToPage(e.currentTarget.value);
+            }
+          }}
+          onBlur={(e) => {
+            goToPage(e.currentTarget.value);
+          }}
+        />
         <button
           className="big-button"
           disabled={quizzesCount / pageLimit <= page}
