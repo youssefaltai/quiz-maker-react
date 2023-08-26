@@ -6,7 +6,9 @@ import { API_URL } from "../env";
 export default function QuizzesProvider({ children }: PropsWithChildren) {
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
   const [quizzesCount, setQuizzesCount] = useState<number>(0);
-  const [pageLimit, setPageLimit] = useState<number>(10);
+  const [pageLimit, setPageLimit] = useState<number>(0);
+  const [dynamicsPage, setDynamicsPage] = useState<number>(1);
+  const [staticsPage, setStaticsPage] = useState<number>(1);
 
   const fetchQuizzes = async (page: number = 1, category: string, onError: (message: string) => void) => {
     try {
@@ -159,7 +161,22 @@ export default function QuizzesProvider({ children }: PropsWithChildren) {
   }
 
   return (
-    <QuizzesContext.Provider value={{ quizzes, pageLimit, quizzesCount, fetchQuizzes, createQuiz, updateQuiz, answerQuiz, getQuiz, deleteQuiz, deleteMultipleQuizzes }}>
+    <QuizzesContext.Provider value={{
+      quizzes,
+      pageLimit,
+      quizzesCount,
+      fetchQuizzes,
+      createQuiz,
+      updateQuiz,
+      answerQuiz,
+      getQuiz,
+      deleteQuiz,
+      deleteMultipleQuizzes,
+      dynamicsPage,
+      setDynamicsPage,
+      staticsPage,
+      setStaticsPage,
+    }}>
       {children}
     </QuizzesContext.Provider>
   );

@@ -5,6 +5,10 @@ type QuizzesContextType = {
   quizzes: Quiz[];
   pageLimit: number;
   quizzesCount: number;
+  dynamicsPage: number;
+  setDynamicsPage: React.Dispatch<React.SetStateAction<number>>;
+  staticsPage: number;
+  setStaticsPage: React.Dispatch<React.SetStateAction<number>>;
   fetchQuizzes: (page: number, category: string, onError: (message: string) => void) => Promise<void>;
   getQuiz: (quizId: string, onError: (message: string) => void) => Promise<Quiz | null>;
   createQuiz: (quiz: Quiz, onError: (message: string) => void) => Promise<Quiz | null>;
@@ -18,6 +22,10 @@ const QuizzesContext = createContext<QuizzesContextType>({
   quizzes: [],
   pageLimit: 0,
   quizzesCount: 0,
+  dynamicsPage: 1,
+  setDynamicsPage: (_: any) => { },
+  staticsPage: 1,
+  setStaticsPage: (_: any) => { },
   fetchQuizzes: async (_: number, __: string, ___: (message: string) => void) => { },
   getQuiz: async (_: string, __: (message: string) => void) => null,
   createQuiz: async (_: Quiz, __: (message: string) => void) => null,
